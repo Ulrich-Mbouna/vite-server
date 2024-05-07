@@ -4,6 +4,9 @@ import index from "@/routes/index"
 import users from '@/routes/users'
 import userCreate from '@/routes/users/create'
 import userById from '@/routes/users/id'
+import userBySlug from '@/routes/users/slug'
+import userDeleteById from '@/routes/users/delete'
+import userUpdateById from '@/routes/users/update'
 
 const router = findmyway()
 
@@ -63,6 +66,26 @@ router.on('POST', '/users/create',async (req, res) => {
     res.statusCode = statusCode
     res.end(data)
 })
+router.on('DELETE', '/users/delete/:id',async (req, res,params) => {
+    const ctx = {req,params}
+    const  { data, statusCode } = await userDeleteById(ctx)
+    res.statusCode = statusCode
+    res.end(data)
+})
+router.on('PUT', '/users/update/:id',async (req, res,params) => {
+    const ctx = {req,params}
+    const  { data, statusCode } = await userUpdateById(ctx)
+    res.statusCode = statusCode
+    res.end(data)
+})
+router.on('GET', '/users/:slug', async (req, res,params) => {
+    const ctx = {req,params}
+    const { data, statusCode } = await userBySlug(ctx)
+
+    res.statusCode = statusCode
+    res.end(data)
+})
+    /*
 router.on('GET', '/users/:id', async (req, res, params) => {
     const ctx = {req, params}
     const { data, statusCode} = await userById(ctx)
@@ -70,4 +93,5 @@ router.on('GET', '/users/:id', async (req, res, params) => {
     res.statusCode = statusCode
     res.end(data)
 })
+     */
 export default router

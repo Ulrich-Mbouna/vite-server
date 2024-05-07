@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "start": "node dist/app.js"
   },
   "devDependencies": {
+    "@types/rethinkdb": "^2.3.21",
     "typescript": "^5.2.2",
     "unimport": "^3.7.1",
     "vite": "^5.1.6",
@@ -19,6 +20,9 @@
     "@types/node": "^20.11.29",
     "find-my-way": "^8.1.0",
     "mariadb": "^3.2.3",
-    "mongodb": "^6.5.0"
+    "mongodb": "^6.5.0",
+    "rethinkdb": "^2.4.2",
+    "rethinkdb-ts": "^2.6.0",
+    "socket.io": "^4.7.5"
   }
 }

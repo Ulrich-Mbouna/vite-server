@@ -1,0 +1,32 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=WebStorm
+
+### Create a new User
+POST localhost:5001/users/create
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "slug": "john"
+}
+
+### Update a User
+PUT localhost:5001/users/update/e239bb30-e45d-4116-9877-8004d80d1067
+Content-Type: application/json
+
+{
+  "name": "Paul updated",
+  "slug": "paulupdated"
+}
+
+
+### Delete a User
+DELETE localhost:5001/users/delete/efe4398d-06e6-439e-b03f-61d4c45cb88e
+Content-Type: application/json
+
+### GET All User
+GET http://localhost:5001/users
+
+### GEt user by slug
+GET localhost:5001/users/john

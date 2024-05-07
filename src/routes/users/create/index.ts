@@ -1,8 +1,10 @@
 import normalizeBody from "../../../utils/normalize-body.ts";
 import createError from "../../../utils/create-error.ts";
-import toSql from "../../../utils/to-sql.ts";
-import useMariadb from "../../../composables/use-mariadb.ts";
+import ctxHandler from "../../../utils/ctx-handler.ts";
+import useRethink from "../../../composables/use-rethink.ts";
+import {r} from "rethinkdb-ts";
 
+/*  Maria DB
 export default ctxHandler(async ctx => {
     const {pool} = await useMariadb()
     const body = await normalizeBody(ctx.req)
@@ -62,4 +64,49 @@ export default ctxHandler(async ctx => {
     await pool.end()
 
     return result
+})
+ */
+
+// Rethinkd DB
+
+export default ctxHandler(async ctx => {
+    const {connect} = useRethink();
+    const body = await normalizeBody(ctx.req);
+    const db = await connect()
+    const searchQuery = {
+        slug: body.slug
+    }
+    const found = await r.table('users')
+        .filter(searchQuery)
+        .nth(0)
+        .default(null)
+        .run(db)
+    if(found) {
+        createError({
+            statusCode: 400,
+            message: `Slug ${body.slug} has been taken`
+        })
+    }
+
+    const timestamp = Date.now()
+    const options = {
+        name: body.name,
+        slug: body.slug,
+        createdAt: timestamp,
+    }
+    const doc = await r.table("users").insert(options, {
+        returnChanges:true
+    })
+        .run(db)
+
+    await db.close()
+
+    if(doc.inserted !== 1) {
+        createError({
+            statusCode: 500,
+            message: "Add user failed"
+        })
+    }
+
+    return doc
 })
